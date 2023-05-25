@@ -1,0 +1,43 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: ds-resource-injector.acme.com
+webhooks:
+  - name: ds-resource-injector.acme.com
+    namespaceSelector:
+      matchLabels:
+        admission-webhook: enabled
+    rules:
+      - apiGroups: [""]
+        apiVersions: ["v1"]
+        operations: ["CREATE"]
+        resources: ["pods"]
+        scope: "*"
+    clientConfig:
+      service:
+        namespace: default
+        name: ds-resource-injector
+        path: /validate-pods
+        port: 443
+      caBundle: |
+        LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUMxRENDQWJ3Q0NRRFdSbXM0YUZ2eVR6QU5CZ2tx
+        aGtpRzl3MEJBUXNGQURBc01Rc3dDUVlEVlFRR0V3SkIKVlRFZE1Cc0dBMVVFQXd3VVpITXRjbVZ6YjNW
+        eVkyVXRhVzVxWldOMGIzSXdIaGNOTWpNd05USXlNakF5TWpNMApXaGNOTWpRd05USXhNakF5TWpNMFdq
+        QXNNUXN3Q1FZRFZRUUdFd0pCVlRFZE1Cc0dBMVVFQXd3VVpITXRjbVZ6CmIzVnlZMlV0YVc1cVpXTjBi
+        M0l3Z2dFaU1BMEdDU3FHU0liM0RRRUJBUVVBQTRJQkR3QXdnZ0VLQW9JQkFRQ3cKU2g5SUFrSTBqaEls
+        YUNTejlFVFRKeHRVak1JcmhHTXVldWFGWTdkN2RtdXBXZkg0Nm1OdkZ3WDhybGExOG8vUwp5OTFMSTgx
+        bnpZM2pMNi9BOE5LbDViS2haRUpwT2V0d0xEZHJYNGNOWEtWQllBOXBEVWprQTI2ajFYN3drMjNkCjd4
+        ekwvTUlNZ3RjRUNHWXludEZ1Mmw3OXVvQjZtRDZ6aW9aRldkUW8vOElHWS9zdFlrWSt6VWdUUVVIN1BZ
+        ajMKOGIvMmxCQS8vVnpoaW1nTmg1eVAyeVZTcVZxMFJlNzNZMGdLNUk3RmdHZzVqelNKazRWL29VektN
+        dGo1K0MxZgpDM0U5dVVBUjQyUlNVLzA1ci9KMldHd29yNE16My9uczBESkJPMjdZQTV1NjE5ejVPbmdM
+        cTZFZkJqdTMyNkYvCmtxZTNFRG1RcUR6Q0N2VmJHeit4QWdNQkFBRXdEUVlKS29aSWh2Y05BUUVMQlFB
+        RGdnRUJBRGdHSmRnaFVISGMKRVhZLzg4SkZRUWFoZVROVHVQWEErN0ptdG9xcEhsOHhtNVVDMmJWMXVw
+        SFVxUTNEMmM4OHFoRFNwSzVIU2tBZApyWThtRjhiS2JSYnh6bk1uQm5VYUk2RkZnSjJ5QjBibGNacTZy
+        dnY4QUw5UUQvcFV0ZWo5TlBLYWZPOHJFQ0ZMClIyOS9kVDFlNDhDWkxqekdGQ2RnTGdiSG44M0hodDEr
+        RVo3N0V4VjA4OGJNOEp6Y29wNnRscXRacWRvSkVFSXcKMmorVU8rR1B2dStkdDExRlFpSFJ6aHl2NTgv
+        MVZjdDNmb0RJRTRPSFVaWjMxMHJDTThoOFhwWTlhQ2dJSnZ6YwpSZVZ0NjIxRlowNlRsOWUwWXBJekxv
+        c0NVSU4zZmgwdUE4RFVLek1lUXFTOFVWMm5teDdiWW5NUXV5RHZkZ0pzCkxNNzZ0RGR4S0RnPQotLS0t
+        LUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+    admissionReviewVersions: ["v1"]
+    sideEffects: None
+    timeoutSeconds: 2
