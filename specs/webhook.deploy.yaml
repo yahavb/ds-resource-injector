@@ -21,6 +21,7 @@ spec:
           effect: NoSchedule
       nodeSelector:
         karpenter.sh/provisioner-name: stk
+      serviceAccountName: ds-resource-injector
       containers:
         - image: 441218111557.dkr.ecr.us-west-2.amazonaws.com/baseimage-ci:ds-resource-injector
           imagePullPolicy: Always

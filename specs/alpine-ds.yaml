@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: alpine
+  namespace: apps
+  labels:
+    k8s-app: alpine
+spec:
+  selector:
+    matchLabels:
+      name: alpine
+  template:
+    metadata:
+      labels:
+        name: alpine
+    spec:
+      nodeSelector:
+        karpenter.sh/provisioner-name: stk
+      containers:
+      - image: alpine
+        command:
+          - /bin/sh
+          - "-c"
+          - "sleep 60m"
+        imagePullPolicy: Always
+        name: alpine
