@@ -1,5 +1,7 @@
 # ds-resource-injector
 
+Daemonset log and metric forwarders (e.g., Fluentbit) require CPU and memory resources proportional to node size. Cluster autoscaler or Karpenter do not factor in the anticipated CPU or memory load from the Daemonset pods resulting in pod eviction. Daemonset pods (agents) should allocate static resources to avoid impact on service pods that run on a node. If that is not possible you can use this webhook that [interceptss](./pkg/admission/admission.go) any `pod` create call in a [namespace decorated](./specs/apps.ns.yaml) with an `admission-webhook: enabled` label and [allocates](./pkg/mutation/inject_ds_res.go) 10% CPU of the node size. 
+
 ## build the binary and the docker image
 ```
 make docker-build
