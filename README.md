@@ -2,16 +2,16 @@
 
 Daemonset log and metric forwarders (e.g., Fluentbit) require CPU and memory resources proportional to node size. Cluster autoscaler or Karpenter do not factor in the anticipated CPU or memory load from the Daemonset pods resulting in pod eviction. Daemonset pods (agents) should allocate static resources to avoid impact on service pods that run on a node. If that is not possible you can use this webhook that [interceptss](./pkg/admission/admission.go) any `pod` create call in a [namespace decorated](./specs/apps.ns.yaml) with an `admission-webhook: enabled` label and [allocates](./pkg/mutation/inject_ds_res.go) 10% CPU of the node size. 
 
-## build the binary and the docker image
+## Build and push the binary and the docker image
 ```
 make docker-build
 ```
 
-## push the docker image to ECR
+## Build locally binary locally
 ```
 make docker-push
 ```
-## generate and deploy cluster certificates
+## Generate and deploy cluster certificates
 
 ```
 cd config
@@ -20,21 +20,21 @@ kubectl apply -f specs/webhook.tls.secret.yaml
 ```
 copy the `caBundle` to `./specs/mutating.config.yaml` and `./specs/validating.config.yaml`
 
-## deploy the MutatingWebhookConfiguration and ValidatingWebhookConfiguration
+## Deploy the MutatingWebhookConfiguration and ValidatingWebhookConfiguration
 
 ```
 kubectl apply -f ./specs/mutating.config.yaml
 kubectl apply -f ./specs/validating.config.yaml
 ```
 
-## deploy the webhook server and service
+## Deploy the webhook server and service
 
 ```
 kubectl apply -f ./specs/webhook.deploy.yaml
 kubectl apply -f ./specs/webhook.svc.yaml
 ```
 
-## test the webhook
+## Test the webhook
 
 The webhook MUST be deployed in OTHER namesapce than it is running to avoid cyclic dependencies between the webhook and the workloads it controls. Therefore, we created the name space `apps` to deploy our test pods. We deploy two type of pods, service pods (under ReplicaSet) and daemonsets pods. 
 
